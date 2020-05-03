@@ -1,0 +1,146 @@
+---
+title: "LUXEMBOURG  |  Google COVID-19 Community Mobility Reports - 2020.04.03"
+output: 
+  flexdashboard::flex_dashboard:
+    storyboard: true
+    theme: journal
+    social: menu
+    source_code: embed
+output_dir: /docs    
+
+---
+
+```{r setup, include=FALSE}
+
+library(flexdashboard)
+library(tidyverse)
+library(dygraphs)
+library(timetk)
+library(knitr)
+
+```
+
+```{r global, cache=TRUE}
+
+
+tidymob <- readRDS("tidymoblu.rds")
+   
+
+```
+
+```{r}
+
+opts_chunk$set(dpi = 200, fig.width = 7) 
+
+```
+
+
+
+```{r}
+
+myplot <- function(x) {
+  
+  p <- x %>% 
+    summarise_by_time(date, .by = "day", adjusted = median(change)) %>%
+    pad_by_time(date, .by = "auto", .pad_value = 10) %>% 
+    rename(change = adjusted) %>% 
+    ggplot() +
+    aes(date, change) +
+    annotate("rect", xmin = as.Date("2020-02-15"), xmax = as.Date("2020-04-26"), ymin = 0, ymax = -100, fill = "lightblue", col = NA) +
+    geom_ribbon(aes(ymin = -100, ymax = change), fill = "white") +
+    geom_line(size = .7, col = "red") +
+    geom_point(size = 1.4, col = "red") +
+    lims(y = c(-100, 70)) +
+    ylab("Change compared to baseline (%).") +
+    scale_x_date(date_breaks = "week", date_labels = "%d-%m") +
+    hrbrthemes::theme_ipsum_rc(grid = "yYX") +
+    theme(panel.ontop = FALSE, axis.text.x = element_text(angle = 0),)
+  
+    plotly::ggplotly(p)
+}
+```
+
+
+
+
+### **Grocery & pharmacy** : Mobility trends for places like grocery markets, food warehouses, farmers markets, specialty food shops, drug stores, and pharmacies.
+
+
+```{r}
+tidymob %>%
+  filter(places == "grocery") %>%
+  myplot()
+```
+
+
+### **Parks Mobility** : Trends for places like local parks, national parks, public beaches, marinas, dog parks, plazas, and public gardens.
+
+```{r}
+tidymob %>%
+  filter(places == "parks") %>%
+  myplot()
+```
+
+### **Transit stations** : Mobility trends for places like public transport hubs such as subway, bus, and train stations.
+
+```{r}
+tidymob %>%
+  filter(places == "transit") %>%
+  myplot()
+```
+
+
+### **Retail & recreation** : Mobility trends for places like restaurants, cafes, shopping centers, theme parks, museums, libraries, and movie theaters.
+
+```{r}
+tidymob %>%
+  filter(places == "retail") %>%
+  myplot()
+```
+
+
+### **Residential** : Mobility trends for places of residence.
+
+```{r}
+tidymob %>%
+  filter(places == "residential") %>%
+  myplot()
+```
+
+### **Workplaces** : Mobility trends for places of work.
+
+```{r}
+tidymob %>%
+  filter(places == "workplaces") %>%
+  myplot()
+```
+
+### **About this data** 
+
+**Mobility Report CSV Documentation**
+
+This dataset is intended to help remediate the impact of COVID-19. It shouldn’t be used for medical diagnostic, prognostic, or treatment purposes. It also isn’t intended to be used for guidance on personal travel plans. Each Community Mobility Report dataset is presented by location and highlights the percent change in visits to places like grocery stores and parks within a geographic area. Location accuracy and the understanding of categorized places varies from region to region, so we don’t recommend using this data to compare changes between countries, or between regions with different characteristics (e.g. rural versus urban areas). We’ll leave a region or category out of the dataset if we don’t have sufficient statistically significant levels of data. To learn how we calculate these trends and preserve privacy, read About this data below.
+
+**Visit & length of stay**
+
+These datasets show how visits and length of stay at different places change compared to a baseline. 
+We calculate these changes using the same kind of aggregated and anonymized data used to show popular times for places in Google Maps.
+
+* Changes for each day are compared to a baseline value for that day of the week:
+
++ The baseline is the *median value*, for the corresponding day of the week, *during the 5-week period Jan 3–Feb 6, 2020*.
+The datasets show trends over several months with the most recent data representing approximately *2-3 days ago* — 
+this is how long it takes to produce the datasets.
+
++ What data is included in the calculation depends on user settings, connectivity, and whether it meets our privacy threshold. If the privacy threshold isn’t met (when somewhere isn’t busy enough to ensure anonymity) we don’t show a change for the day. As a result, you may encounter empty fields for certain places and dates.
+
+* We include categories that are useful to social distancing efforts as well as access to essential services.
+
+We calculate these insights based on data from users who have *opted-in* to Location History for their Google Account, so the data represents a sample of our users. As with all samples, this may or may not represent the exact behavior of a wider population.
+
+Google LLC  "Google COVID-19 Community Mobility Reports.  
+https://www.google.com/covid19/mobility/   
+Accessed: 2020-04-03.
+
+DARP - davidsolito.com  
+https://www.davidsolit.com
