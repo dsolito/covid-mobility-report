@@ -6,7 +6,6 @@ output:
     theme: journal
     social: menu
     source_code: embed
-output_dir: /docs    
 
 ---
 
@@ -143,4 +142,4 @@ https://www.google.com/covid19/mobility/
 Accessed: 2020-04-03.
 
 DARP - davidsolito.com  
-https://www.davidsolit.com
+https://www.davidsolito.com

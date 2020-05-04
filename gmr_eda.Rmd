@@ -89,7 +89,7 @@ We calculate these insights based on data from users who have *opted-in* to Loca
 
 ```{r}
 
-mob_tidy <- mob %>% 
+tidymoblu <- mob %>% 
   rename(ccode = country_region_code,
          cregion = country_region,
          subreg1 = sub_region_1,
@@ -97,11 +97,14 @@ mob_tidy <- mob %>%
          retail = retail_and_recreation_percent_change_from_baseline,
          grocery = grocery_and_pharmacy_percent_change_from_baseline,
          parks = parks_percent_change_from_baseline,
-         transitt = transit_stations_percent_change_from_baseline,
+         transit = transit_stations_percent_change_from_baseline,
          workplaces = workplaces_percent_change_from_baseline,
          residential = residential_percent_change_from_baseline) %>% 
-  pivot_longer(cols = retail:residential, names_to = "places", values_to = "change")
+  pivot_longer(cols = retail:residential, names_to = "places", values_to = "change") %>% 
+  filter(ccode == "LU")
 
+
+saveRDS(tidymoblu, "tidymoblu.rds")
 
 
 ```
@@ -168,6 +171,23 @@ df %>%
 
 
 
+```{r}
+# 
+# tidymob %>% 
+#   filter(ccode == "LU") %>% 
+#   filter(places == "transit") %>% 
+#   group_by(places) %>% 
+#   summarise_by_time(date, .by = "week", adjusted = median(change)) %>% 
+#   plot_time_series(date, adjusted, 
+#                    .title = "transit",
+#                    .facet_ncol = 2,
+#                    .facet_scales = "free",
+#                    .smooth_degree = 2,
+#                    .smooth_alpha = .4,
+#                    .plotly_slider = FALSE, 
+#                    .interactive   = TRUE)
+
+```
 
 
 Google LLC "Google COVID-19 Community Mobility Reports."
