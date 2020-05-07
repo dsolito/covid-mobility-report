@@ -1,5 +1,5 @@
 ---
-title: "LUXEMBOURG  |  Google COVID-19 Community Mobility Reports - 2020.04.03"
+title: "LUXEMBOURG  |  Google COVID-19 Community Mobility Reports - 2020.04.30"
 output: 
   flexdashboard::flex_dashboard:
     storyboard: true
@@ -45,7 +45,7 @@ myplot <- function(x) {
     rename(change = adjusted) %>% 
     ggplot() +
     aes(date, change) +
-    annotate("rect", xmin = as.Date("2020-02-15"), xmax = as.Date("2020-04-26"), ymin = 0, ymax = -100, fill = "lightblue", col = NA) +
+    annotate("rect", xmin = as.Date("2020-02-15"), xmax = as.Date("2020-04-30"), ymin = 0, ymax = -100, fill = "lightblue", col = NA) +
     geom_ribbon(aes(ymin = -100, ymax = change), fill = "white") +
     geom_line(size = .7, col = "red") +
     geom_point(size = 1.4, col = "red") +
@@ -139,7 +139,7 @@ We calculate these insights based on data from users who have *opted-in* to Loca
 
 Google LLC  "Google COVID-19 Community Mobility Reports.  
 https://www.google.com/covid19/mobility/   
-Accessed: 2020-04-03.
+Accessed: 2020-05-07.
 
 DARP - davidsolito.com  
 https://www.davidsolito.com
